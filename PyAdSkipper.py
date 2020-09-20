@@ -9,8 +9,13 @@ import requests
 import subprocess
 import os
 import re
+import getpass
 
-# requires testing, and testing for mobile
+
+last_input = win32api.GetLastInputInfo()
+last_active = time.time()
+
+
 
 CLIENT_ID = "6048c9d95dc74ed7bae279a4e1f1aaca"
 CLIENT_SECRET = "e22ce642867b4259af1e853584588dc8"
@@ -68,35 +73,37 @@ class Controller:
         return subprocess.Popen("spotify")
 
     def reopen_and_replay(self):
-        time.sleep(3)
+        time.sleep(2.5)
         self.close()
         self.open()
-        time.sleep(2)
+        time.sleep(2.5)
         self.find_spotify_window()
-        time.sleep(2)
+        time.sleep(2.5)
         win32api.PostMessage(self.handle, win32con.WM_KEYDOWN, 0x20, 0) # post space
+
+        # perhpaps a while loop testing if song is playing, and if not, every x interval post message
 
     def run(self):
         while self.running:
-            try:
-                currently_playing = self.spotify.currently_playing()
-                
-                if currently_playing is not None:
-                    if currently_playing['currently_playing_type'] == 'track':
-                        if self.current_playing_name != currently_playing['item']['name']:
-                            print(f"Now playing {currently_playing['item']['name']}")
-                            self.current_playing_name = currently_playing['item']['name']
+            if win32api.GetLastInputInfo() != last_input: # if active
+                try:
+                    currently_playing = self.spotify.currently_playing()
+                    
+                    if currently_playing is not None:
+                        if currently_playing['currently_playing_type'] == 'track':
+                            if self.current_playing_name != currently_playing['item']['name']:
+                                print(f"Now playing {currently_playing['item']['name']}")
+                                self.current_playing_name = currently_playing['item']['name']
 
-                    elif currently_playing['currently_playing_type'] == 'ad':
-                        print('playing an ad')
-                        if next((device for device in self.spotify.devices()["devices"] if device["name"] == os.environ['COMPUTERNAME']), None):
-                            self.reopen_and_replay()
-            except Exception as e:
-                print("error", e)
-                self.restart_connection()
+                        elif currently_playing['currently_playing_type'] == 'ad':
+                            print('playing an ad')
+                            if next((device for device in self.spotify.devices()["devices"] if device["name"] == os.environ['COMPUTERNAME'] and device["type"] == "Computer"), None):
+                                self.reopen_and_replay()
+                except Exception as e:
+                    print("error", e)
+                    self.restart_connection()
 
-
-            time.sleep(1)
+                time.sleep(0.2)
     
 
 
