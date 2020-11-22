@@ -17,9 +17,9 @@ last_active = time.time()
 
 dotenv.load_dotenv(override=True)
 CLIENT_ID = os.getenv("CLIENT_ID")
-CLINT_SECRET = os.getenv("CLIENT_SECRET")
+CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 REDIRECT_URI = os.getenv("REDIRECT_URI")
-CLIENT_ID = os.getenv("USERNAME")
+USERNAME = os.getenv("USERNAME")
 SCOPE = "user-read-playback-state user-library-read user-top-read"
 
     
