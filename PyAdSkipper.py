@@ -9,19 +9,18 @@ import requests
 import subprocess
 import os
 import re
-import getpass
+import dotenv
 
 
 last_input = win32api.GetLastInputInfo()
 last_active = time.time()
 
-
-
-CLIENT_ID = "6048c9d95dc74ed7bae279a4e1f1aaca"
-CLIENT_SECRET = "e22ce642867b4259af1e853584588dc8"
-REDIRECT_URI = "http://127.0.0.1:8000"
+dotenv.load_dotenv(override=True)
+CLIENT_ID = os.getenv("CLIENT_ID")
+CLINT_SECRET = os.getenv("CLIENT_SECRET")
+REDIRECT_URI = os.getenv("REDIRECT_URI")
+CLIENT_ID = os.getenv("USERNAME")
 SCOPE = "user-read-playback-state user-library-read user-top-read"
-USERNAME = "Ethanol"
 
     
 class Controller:
@@ -57,6 +56,7 @@ class Controller:
             if re.match(a, str(win32gui.GetWindowText(hwnd))) is not None:
                 handles.append(hwnd)
         win32gui.EnumWindows(callback, ".*Spotify Free*")
+        print(handles)
         if handles:
             self.handle = handles[0]
 
@@ -66,22 +66,21 @@ class Controller:
 
     def close(self):
         """closes all spotify tasks"""
-        os.system(f'taskkill /f /im spotify.exe')
+        os.system(r'C:/windows/system32/taskkill.exe /f /im spotify.exe')
 
     def open(self):
         """opens a spotify task"""
         return subprocess.Popen("spotify")
 
     def reopen_and_replay(self):
-        time.sleep(2.5)
+        time.sleep(3)
         self.close()
+        time.sleep(3)
         self.open()
-        time.sleep(2.5)
-        self.find_spotify_window()
-        time.sleep(2.5)
+        time.sleep(5)
+        self.find_spotify_window() 
+        time.sleep(5)
         win32api.PostMessage(self.handle, win32con.WM_KEYDOWN, 0x20, 0) # post space
-
-        # perhpaps a while loop testing if song is playing, and if not, every x interval post message
 
     def run(self):
         while self.running:
@@ -104,6 +103,7 @@ class Controller:
                     self.restart_connection()
 
                 time.sleep(0.2)
+
     
 
 
