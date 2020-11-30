@@ -110,10 +110,8 @@ class Controller:
 
 
 controller = Controller(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, SCOPE, USERNAME)
-controller.reopen_and_replay()
-'''
 try:
     
     controller.run()
 except KeyboardInterrupt as e:
-    quit()'''
+    quit()
