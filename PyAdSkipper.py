@@ -16,10 +16,11 @@ last_input = win32api.GetLastInputInfo()
 last_active = time.time()
 
 dotenv.load_dotenv(override=True)
-CLIENT_ID = os.getenv("CLIENT_ID")
-CLIENT_SECRET = os.getenv("CLIENT_SECRET")
-REDIRECT_URI = os.getenv("REDIRECT_URI")
-USERNAME = os.getenv("USERNAME")
+CLIENT_ID = os.getenv("CLIENT_ID") # spotify client id
+CLIENT_SECRET = os.getenv("CLIENT_SECRET") # spotify client secret
+REDIRECT_URI = os.getenv("REDIRECT_URI") or "http://127.0.0.1:8000"
+USERNAME = os.getenv("USERNAME") # spotify username
+SPOTIFY_PATH = os.getenv("SPOTIFY_PATH") # exact path to spotify
 SCOPE = "user-read-playback-state user-library-read user-top-read"
 
     
@@ -55,7 +56,7 @@ class Controller:
         def callback(hwnd, a):
             if re.match(a, str(win32gui.GetWindowText(hwnd))) is not None:
                 handles.append(hwnd)
-        win32gui.EnumWindows(callback, ".*Spotify Free*")
+        win32gui.EnumWindows(callback, ".*Spotify*")
         print(handles)
         if handles:
             self.handle = handles[0]
@@ -66,20 +67,20 @@ class Controller:
 
     def close(self):
         """closes all spotify tasks"""
-        os.system(r'C:/windows/system32/taskkill.exe /f /im spotify.exe')
+        os.system(r'C:/windows/system32/taskkill.exe /f /im Spotify.exe')
 
     def open(self):
         """opens a spotify task"""
-        return subprocess.Popen("spotify")
+        return subprocess.Popen(SPOTIFY_PATH)
 
     def reopen_and_replay(self):
         time.sleep(3)
         self.close()
         time.sleep(3)
         self.open()
-        time.sleep(5)
+        time.sleep(2)
         self.find_spotify_window() 
-        time.sleep(5)
+        time.sleep(4)
         win32api.PostMessage(self.handle, win32con.WM_KEYDOWN, 0x20, 0) # post space
 
     def run(self):
@@ -109,7 +110,10 @@ class Controller:
 
 
 controller = Controller(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, SCOPE, USERNAME)
+controller.reopen_and_replay()
+'''
 try:
+    
     controller.run()
 except KeyboardInterrupt as e:
-    quit()
+    quit()'''
