@@ -1,4 +1,5 @@
 # PyAdSkipper
-A python script that skips Spotify ads for me by re-launching the app when it detects an ad, which skips the ads.
+A python script that skips Spotify ads, and can be launched through a GUI.
 
-Uses spotipy and pywin32. Values like client ID, secret, redirect URI and username are set in a .env file.
+# How does it work?
+Update README later
