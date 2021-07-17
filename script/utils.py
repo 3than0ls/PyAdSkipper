@@ -13,7 +13,7 @@ def locate_spotify_exe():
     user = getpass.getuser()
     dirs = [
         rf"C:\\Users\\{user}\\AppData\\Roaming\\Spotify",
-        r"C:\Program Files\Spotify",
+        r"C:\\Program Files\\Spotify",
     ]
     spotify_path = None
 

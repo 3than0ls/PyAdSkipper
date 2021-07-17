@@ -35,7 +35,7 @@ class Guide(tk.Frame):
         )._pack()
         Link(
             self.frame,
-            "Visit this project's GitHub repo",
+            "Visit this project's GitHub repo for more information",
             "https://github.com/3than0ls/PyAdSkipper",
         )._pack()
 

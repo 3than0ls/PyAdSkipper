@@ -5,6 +5,8 @@ from pages.home import Home
 from pages.guide import Guide
 from utils import WIDTH, HEIGHT
 
+VERSION = "1.0"
+
 
 class Application(tk.Frame):
     def __init__(self, root):

@@ -11,6 +11,8 @@ import subprocess
 import os
 import shutil
 
+VERSION = "1.0"
+
 
 class Controller:
     # intervals of 0.25 seconds between each loop
@@ -120,7 +122,6 @@ class Controller:
 
             spotify_pid = get_spotify_pid(self.spath)
             currently_playing = self.currently_playing(spotify_pid=spotify_pid)
-            # print(currently_playing)
             # nothing is being played, so just do nothing
             if currently_playing == "<ADVERTISEMENT>":
                 try:
@@ -130,7 +131,6 @@ class Controller:
                     continue
             else:
                 if currently_playing != last_song:
-                    print("playing", currently_playing)
                     last_song = currently_playing
 
             # do this every interval seconds
@@ -139,8 +139,6 @@ class Controller:
 
 if __name__ == "__main__":
     controller = Controller()
-    # controller.restart_spotify()
-    # quit()
     try:
         controller.start()
     except KeyboardInterrupt as e:
