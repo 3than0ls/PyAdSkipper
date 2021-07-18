@@ -24,7 +24,7 @@ def get_pid():
 
 
 class Home(tk.Frame):
-    def __init__(self, master):
+    def __init__(self, master, *args):
         super().__init__(master)
         self.running = True if get_pid() is not None else False
         self.widget()

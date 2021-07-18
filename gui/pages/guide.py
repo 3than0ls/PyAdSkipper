@@ -3,8 +3,9 @@ from utils import Header, Info, Link
 
 
 class Guide(tk.Frame):
-    def __init__(self, master):
+    def __init__(self, master, version, *args):
         super().__init__(master)
+        self.version = version
         # configure canvas and frame for scroll bar
         self.canvas = tk.Canvas(
             self,
@@ -27,11 +28,20 @@ class Guide(tk.Frame):
         self.widget()
 
     def widget(self):
+        Info(
+            self.frame,
+            text=f"Version {self.version}",
+        )._pack()
         Header(self.frame, text="General Information")._pack()
-        general_info = "PyAdSkipper is a tool used to skip Spotify ads. It functions by detecting when your Spotify app is playing an advertisement, automatically closes the Spotify application, relaunches it, and then sends spacebar to the application, which resumes music."
+        general_info = f"PyAdSkipper is a tool used to skip Spotify ads. It functions by detecting when an ad is being played, restarting Spotify, and resuming music."
         Info(
             self.frame,
             text=general_info,
+        )._pack()
+        Link(
+            self.frame,
+            "Developed by Ethanol",
+            "https://github.com/3than0ls",
         )._pack()
         Link(
             self.frame,

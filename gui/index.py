@@ -5,7 +5,7 @@ from pages.home import Home
 from pages.guide import Guide
 from utils import WIDTH, HEIGHT
 
-VERSION = "1.0"
+VERSION = "1.1"
 
 
 class Application(tk.Frame):
@@ -21,7 +21,7 @@ class Application(tk.Frame):
 
         for Page in (Home, Settings, Guide):
             page_name = Page.__name__
-            frame = Page(nb)
+            frame = Page(nb, VERSION)
             frame.pack(fill="both", expand=True)
             nb.add(frame, text=page_name)
 
