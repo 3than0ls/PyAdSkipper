@@ -5,7 +5,7 @@ from pages.home import Home
 from pages.guide import Guide
 from utils import WIDTH, HEIGHT
 
-VERSION = "1.1"
+VERSION = "1.2"
 
 
 class Application(tk.Frame):
