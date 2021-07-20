@@ -3,8 +3,10 @@ A python script that skips Spotify ads, and can be launched through a GUI. Uses 
 
 # How does it work?
 This script skips Spotify ads by detecting when the Spotify application is playing an ad, gracefully closing Spotify, re-opening it, and sending a spacebar message to it, which resumes playing.
+Note that due to complications unfortunately out of this script's control, some Spotify ads are not detected as ads and aren't skipped.
 
-# PyAdSkipper Settings
+
+# PyAdSkipper settings
 Application settings can be changed using the GUI. Manually changing the values may result in some things not working. If this is the case, just delete `settings.json` and a new one with default settinsg will be automatically generated.
 
 **`Spotify Path`** - `Windows path to Spotify.exe` - This is the path to Spotify.exe on your computer. If not specified, the script will attempt to locate Spotify.exe at the paths `"C:\\Users\\<user>\\AppData\\Roaming\\Spotify"` and `"C:\\Program Files\\Spotify"`. If it still can't find it, the script will throw an error that will be shown on the GUI home screen.
@@ -17,3 +19,10 @@ Application settings can be changed using the GUI. Manually changing the values 
 
 # Packages
 PyAdSkipper relies on `pywin32` for interaction with handles to the Spotify window, and `psutil` to get information about running processes.
+PyAdSkipper also uses `pyinstaller` to compile the script into an executable, and `black` to format code, but these are developer dependencies
+
+# Compiling the script and GUI to 2 seperate executables
+Install all dependencies and dev dependencies specified by the Pipfile, and then run these two commands.
+1) `pyinstaller -F -i .\icon.ico -w .\gui\PyAdSkipper.py`
+2) `pyinstaller -F -i .\icon.ico -w .\script\PyAdScript.py`
+Then, move `icon.ico` to the created `dist` folder. After running it the first time, a `settings.json` file and `pid.txt` file will be generated.

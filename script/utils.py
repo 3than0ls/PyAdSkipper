@@ -67,6 +67,8 @@ def get_spotify_pid(spotify_path):
     if spotify_path is None:
         return _psutil_get_spotify_pid()
 
+    _psutil_get_spotify_pid
+
     try:
         outputs = subprocess.check_output(
             [
@@ -78,6 +80,7 @@ def get_spotify_pid(spotify_path):
                 "ProcessId",
             ],
             encoding="utf-8",
+            creationflags=subprocess.CREATE_NO_WINDOW,
         )
         outputs = outputs.strip().split("ProcessId")[1].split()
         if outputs:

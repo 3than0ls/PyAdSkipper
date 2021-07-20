@@ -26,7 +26,10 @@ class Controller:
         with open(r".\\settings.json", "r") as f:
             self.settings = json.load(f)
         # if no spotify path is provided, try to find it and set. if it is not found in locate_spotify_exe, an error is thrown
-        if not self.settings["Spotify Path"] and (spotify_path := locate_spotify_exe()):
+        if (
+            not self.settings["Spotify Path"]
+            or self.settings["Spotify Path"].lower() == "<please specify>"
+        ) and (spotify_path := locate_spotify_exe()):
             self.settings["Spotify Path"] = spotify_path
             with open(r".\\settings.json", "w") as f:
                 json.dump(self.settings, f, indent=4)
@@ -52,7 +55,11 @@ class Controller:
 
     def is_locked(self):
         # https://stackoverflow.com/a/57258754/9474247
-        outputall = str(subprocess.check_output("TASKLIST"))
+        outputall = str(
+            subprocess.check_output(
+                "TASKLIST", creationflags=subprocess.CREATE_NO_WINDOW
+            )
+        )
         return "LogonUI.exe" in outputall
 
     def restart_spotify(self, spotify_pid=None):
@@ -122,6 +129,7 @@ class Controller:
 
             spotify_pid = get_spotify_pid(self.spath)
             currently_playing = self.currently_playing(spotify_pid=spotify_pid)
+            # print(currently_playing)
             # nothing is being played, so just do nothing
             if currently_playing == "<ADVERTISEMENT>":
                 try:
@@ -131,6 +139,7 @@ class Controller:
                     continue
             else:
                 if currently_playing != last_song:
+                    # print(last_song)
                     last_song = currently_playing
 
             # do this every interval seconds

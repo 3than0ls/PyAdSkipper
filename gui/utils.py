@@ -3,11 +3,13 @@ from tkinter import ttk
 from tkinter.filedialog import askopenfilename
 import webbrowser
 import json
+import psutil
+import os
 
 
 ### WIDTH and HEIGHT of the GUI window
 WIDTH = 420
-HEIGHT = 170
+HEIGHT = 190
 
 
 ### utility functions to save and load settings
@@ -29,6 +31,28 @@ def load_settings(path="settings.json"):
         }
         save_settings(default_settings)
         return default_settings
+
+
+### utility function to get process IDs by name, same one method as used in the script function _psutil_get_spotify_pid() in utils
+def get_process_by_name(name):
+    process = None
+    for p in psutil.process_iter():
+        name_, exe, cmdline = "", "", []
+        try:
+            name_ = p.name()
+            cmdline = p.cmdline()
+            exe = p.exe()
+        except (psutil.AccessDenied, psutil.ZombieProcess):
+            pass
+        except psutil.NoSuchProcess:
+            continue
+        if name == name_ or os.path.basename(exe) == name:
+            if len(cmdline) == 1:
+                process = p
+    if process is None:
+        return None
+    else:
+        return process
 
 
 #### A bunch of components used in the GUI
@@ -72,8 +96,8 @@ class Dropdown(ttk.Combobox):
 
 class FileSelector(tk.Button):
     def __init__(self, master, name, value="", on_change=lambda: None):
-        # sv is the file
-        sv = tk.StringVar(value=value)
+        # sv is StringVar for the filename
+        sv = tk.StringVar(value=value.replace(r"\\", "\\"))
         self.sv = sv
         self.on_change = on_change
         self.name = name
@@ -82,7 +106,7 @@ class FileSelector(tk.Button):
             filename = askopenfilename()
             self.master.focus()
             if filename:
-                self.sv.set(filename)
+                self.sv.set(filename.replace(r"\\", "\\"))
             self.on_change(None)
 
         pixel = tk.PhotoImage(width=100, height=15)
@@ -183,13 +207,17 @@ class Header(tk.Label):
 
 
 class Info(tk.Label):
-    def __init__(self, master, text):
-        super().__init__(master, text=text, wraplength=WIDTH - 40, justify="left")
-
-    def _pack(self):
-        self.pack(
-            anchor=tk.NW,
+    def __init__(self, master, text, center=False):
+        self.center = center
+        super().__init__(
+            master,
+            text=text,
+            wraplength=WIDTH - 40,
+            justify=tk.LEFT if not center else tk.CENTER,
         )
+
+    def _pack(self, pady=0):
+        self.pack(anchor=tk.NW if not self.center else tk.N, pady=pady)
         return self
 
 

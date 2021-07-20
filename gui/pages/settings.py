@@ -4,6 +4,7 @@ from utils import (
     Dropdown,
     Input,
     FileSelector,
+    Info,
     save_settings,
     load_settings,
 )
@@ -25,7 +26,13 @@ class Settings(tk.Frame):
         self.widget()
 
     def widget(self):
-        settings_frame = tk.Frame(self, pady=5)
+        Info(
+            self,
+            text="Updates to settings require the script to be restarted.",
+            center=True,
+        )._pack(pady=5)
+
+        settings_frame = tk.Frame(self)
         settings_frame.grid_columnconfigure(1, weight=1)
         inputs = []  # may be better known as entries
 
