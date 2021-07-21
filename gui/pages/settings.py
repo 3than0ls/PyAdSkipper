@@ -17,9 +17,9 @@ class Settings(tk.Frame):
         self.yes_no_options = ["Yes", "No"]
         self.tooltips = {
             "Spotify Path": "The path to Spotify on your local computer.",
-            "Speed": "How fast the script closes and reopens Spotify. Set this value lower if your computer is slow, or is experiencing high CPU usage.",
             "Pause When Locked": "Whether or not to stop the script from restarting Spotify while the Windows account is locked. This helps prevent Spotify restarting when using Spotify on phone and it reaches an ad.",
             "Push To Back": "Whether or not to push Spotify below the active window after restart.",
+            "Create Shortcut": "Whether or not to create a desktop shortcut when the GUI launches. Settings this to yes will create a shortcut or overwrite the previous shortcut on GUI launch, so even when you delete it a new one will be generated. Set this to no, it will delete the current shortcut and no longer generate new ones.",
         }
         self.settings = load_settings()
 
@@ -50,14 +50,11 @@ class Settings(tk.Frame):
             CreateToolTip(label, self.tooltips[name])
 
             ### CREATE ENTRY WIDGET
-            if name == "Speed":
-                entry = Dropdown(
-                    settings_frame,
-                    name,
-                    self.speed_options,
-                    self.speed_options.index(setting),
-                )
-            elif name == "Pause When Locked" or name == "Push To Back":
+            if (
+                name == "Pause When Locked"
+                or name == "Push To Back"
+                or name == "Create Shortcut"
+            ):
                 entry = Dropdown(
                     settings_frame,
                     name,

@@ -59,12 +59,3 @@ class Guide(tk.Frame):
             self.frame,
             text=not_working,
         )._pack()
-        Header(
-            self.frame,
-            text="I have just switched Spotify accounts, and the tool is not working.",
-        )._pack()
-        issues_and_troubleshooting = 'This is because this script caches user information and reuses it rather than asking you or fetching it each time it is started. However, it does mean that if you are switching accounts, the cached information is no longer useful. To fix this, you have to go into the script\'s local directory, and delete all files that start with ".cache".'
-        Info(
-            self.frame,
-            text=issues_and_troubleshooting,
-        )._pack()

@@ -25,9 +25,9 @@ def load_settings(path="settings.json"):
     except:
         default_settings = {
             "Spotify Path": "<Please specify>",
-            "Speed": "Medium",
             "Pause When Locked": "Yes",
-            "Push To Back": "Yes",
+            "Push To Back": "No",
+            "Create Shortcut": "Yes",
         }
         save_settings(default_settings)
         return default_settings
@@ -199,6 +199,7 @@ class Header(tk.Label):
             text=text,
             font=("helvetica", "10", "bold"),
             wraplength=WIDTH - 40,
+            justify=tk.LEFT,
         )
 
     def _pack(self):

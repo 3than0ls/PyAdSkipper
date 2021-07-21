@@ -74,7 +74,7 @@ class Home(tk.Frame):
                     process = subprocess.Popen(
                         os.path.abspath(r".\PyAdScript.exe"),
                         stdin=subprocess.PIPE,
-                        # stdout=subprocess.PIPE,
+                        stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE,
                         universal_newlines=True,
                         creationflags=subprocess.DETACHED_PROCESS,
@@ -85,13 +85,12 @@ class Home(tk.Frame):
                         self.handle_error(err)
                         self.running = True  # will be set to False later
                     except subprocess.TimeoutExpired:
+                        # this means that the script initialized with no problems
                         process.kill()
-                        process.wait()
                         # re-fetch the script process
                         process = get_process_by_name("PyAdScript.exe")
-                        # this means that the script is running with no problems (so far)
+                        set_pid(process.pid)
                         self.status.set("")
-                    set_pid(process.pid)
             self.running = not self.running
 
             btn["activebackground"] = btn["bg"] = status[self.running]["color"]

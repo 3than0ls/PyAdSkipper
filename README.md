@@ -17,7 +17,8 @@ Application settings can be changed using the GUI. Manually changing the values 
 
 **`Pause When Locked`** - `Yes` or `No` - If set to `Yes`, Spotify will be pushed below the active window and not cover it after restarting.
 
-# Packages
+# Packages and Python version
+PyAdSkipper runs on Python 3.8
 PyAdSkipper relies on `pywin32` for interaction with handles to the Spotify window, and `psutil` to get information about running processes.
 PyAdSkipper also uses `pyinstaller` to compile the script into an executable, and `black` to format code, but these are developer dependencies
 

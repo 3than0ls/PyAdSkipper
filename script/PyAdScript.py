@@ -11,20 +11,18 @@ import subprocess
 import os
 import shutil
 
-VERSION = "1.0"
+VERSION = "1.1"
 
 
 class Controller:
     # intervals of 0.25 seconds between each loop
     INTERVALS = 0.25
-    # map of periods of time between steps
-    PERIODS = {"Fast": 2, "Medium": 2.75, "Slow": 3.5}
 
     def __init__(self):
-        self.running = True
         # set settings variables
         with open(r".\\settings.json", "r") as f:
             self.settings = json.load(f)
+
         # if no spotify path is provided, try to find it and set. if it is not found in locate_spotify_exe, an error is thrown
         if (
             not self.settings["Spotify Path"]
@@ -45,7 +43,6 @@ class Controller:
             .decode("utf-8")
         )
 
-        self.period = Controller.PERIODS[self.settings["Speed"]]
         # set spotify process ID during initalization
         pid = get_spotify_pid(self.spath)
         if pid is not None:
@@ -74,11 +71,11 @@ class Controller:
         # used to have a backup to check if it was still open, but now we'll just hope and pray :)
 
         # wait a little under less than one second after termination to reopen
-        time.sleep(1)
+        time.sleep(0.9)
         # reopen spotify
         spotify_process = subprocess.Popen(self.settings["Spotify Path"])
         self.spotify_pid = spotify_process.pid
-        time.sleep(self.period)
+        time.sleep(1.9)
         # find window handle and post a space to it to continue playing
         window_handle = get_spotify_window_handle(spotify_pid=self.spotify_pid)
         win32api.PostMessage(window_handle, win32con.WM_KEYDOWN, 0x20, 0)  # post space
@@ -122,7 +119,7 @@ class Controller:
     def start(self):
         last_song = ""
 
-        while self.running:
+        while True:
             if self.settings["Pause When Locked"] == "Yes" and self.is_locked():
                 # skip, no need to check
                 continue
