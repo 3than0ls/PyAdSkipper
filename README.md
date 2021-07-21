@@ -1,6 +1,11 @@
 # PyAdSkipper
 A python script that skips Spotify ads, and can be launched through a GUI. Uses pywin32, and only works for Windows.
 
+To start it, download the latest release. Extract the downloaded .zip folder (in File Explorer do this by clicking Compressed Folder Tools -> Extract All) into your desired location. This will open a new File Explorer window with the extracted files. Run **PyAdSkipper.exe (not PyAdScript.exe)**, which is the GUI to interact with the script. Running this will also create a desktop icon for you, which you can find out how to disable by reading the settings below.
+
+Usually, your computer may prevent you from downloading or running .exe files you downloaded from the internet. If you don't trust the .exe downloaded from the release, you can review the source code that is also found with the release, or go through the latest code in the GitHub repository. If you still don't trust the .exe, you can download the code and find out how to compile it yourself to guarantee safety. This is more complicated and only recommended for those that have a bit of experience with how Python and Pipenv.
+
+
 # How does it work?
 This script skips Spotify ads by detecting when the Spotify application is playing an ad, gracefully closing Spotify, re-opening it, and sending a spacebar message to it, which resumes playing.
 Note that due to complications unfortunately out of this script's control, some Spotify ads are not detected as ads and aren't skipped.
@@ -20,7 +25,7 @@ Application settings can be changed using the GUI. Manually changing the values 
 `Create Shortcut` - `Yes` or `No` - If set to `Yes`, a new desktop shortcut will be created (and possibly override the previous one) in the desktop folder. If set to no, shortcut deletion be stopped, but the current desktop shortcut will not be deleted.
 
 # Packages and Python version
-PyAdSkipper runs on Python 3.8
+PyAdSkipper runs on Python 3.8, and uses Pipenv to manage dependencies
 PyAdSkipper relies on `pywin32` for interaction with handles to the Spotify window, and `psutil` to get information about running processes.
 PyAdSkipper also uses `pyinstaller` to compile the script into an executable, and `black` to format code, but these are developer dependencies
 

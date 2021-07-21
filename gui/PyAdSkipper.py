@@ -35,10 +35,6 @@ if __name__ == "__main__":
     create_shortcut = load_settings()["Create Shortcut"]
     if create_shortcut:
         create_desktop_shortcut()
-    else:
-        shortcut_path = os.path.join(os.path.expanduser("~/Desktop"), "PyAdSkipper.lnk")
-        if os.path.exists(shortcut_path):
-            os.remove(shortcut_path)
 
     root = tk.Tk(className=" PyAdSkipper")
     root.resizable(False, False)
