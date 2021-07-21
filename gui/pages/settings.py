@@ -19,7 +19,7 @@ class Settings(tk.Frame):
             "Spotify Path": "The path to Spotify on your local computer.",
             "Pause When Locked": "Whether or not to stop the script from restarting Spotify while the Windows account is locked. This helps prevent Spotify restarting when using Spotify on phone and it reaches an ad.",
             "Push To Back": "Whether or not to push Spotify below the active window after restart.",
-            "Create Shortcut": "Whether or not to create a desktop shortcut when the GUI launches. Settings this to yes will create a shortcut or overwrite the previous shortcut on GUI launch, so even when you delete it a new one will be generated. Set this to no, it will delete the current shortcut and no longer generate new ones.",
+            "Create Shortcut": "Whether or not to create a desktop shortcut when the GUI launches. Setting this to yes will create a shortcut or overwrite the previous shortcut on GUI launch, so even when you delete it a new one will be generated. Set this to no, and it will no longer generate new ones.",
         }
         self.settings = load_settings()
 
