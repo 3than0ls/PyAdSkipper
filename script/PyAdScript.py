@@ -10,6 +10,7 @@ import win32gui, win32api, win32con
 import subprocess
 import os
 import shutil
+import ctypes
 
 VERSION = "1.1"
 
@@ -51,13 +52,17 @@ class Controller:
             self.spotify_pid = None
 
     def is_locked(self):
+        # https://stackoverflow.com/a/57258754/9474247, but I think this causes Windows to not sleep
+        # outputall = str(
+        #     subprocess.check_output(
+        #         "TASKLIST", creationflags=subprocess.CREATE_NO_WINDOW
+        #     )
+        # )
+        # return "LogonUI.exe" in outputall
+
         # https://stackoverflow.com/a/57258754/9474247
-        outputall = str(
-            subprocess.check_output(
-                "TASKLIST", creationflags=subprocess.CREATE_NO_WINDOW
-            )
-        )
-        return "LogonUI.exe" in outputall
+        user32 = ctypes.windll.User32
+        return user32.GetForegroundWindow() % 10 == 0
 
     def restart_spotify(self, spotify_pid=None):
         if spotify_pid is None:
@@ -68,14 +73,13 @@ class Controller:
         window_handle = get_spotify_window_handle(spotify_pid=spotify_pid)
         win32gui.PostMessage(window_handle, win32con.WM_CLOSE, None, None)
 
-        # used to have a backup to check if it was still open, but now we'll just hope and pray :)
-
-        # wait a little under less than one second after termination to reopen
-        time.sleep(0.9)
+        # wait one second after termination to reopen
+        time.sleep(1)
         # reopen spotify
         spotify_process = subprocess.Popen(self.settings["Spotify Path"])
         self.spotify_pid = spotify_process.pid
-        time.sleep(1.9)
+        # wait another 3 seconds for the spotify window to be created and load
+        time.sleep(3)
         # find window handle and post a space to it to continue playing
         window_handle = get_spotify_window_handle(spotify_pid=self.spotify_pid)
         win32api.PostMessage(window_handle, win32con.WM_KEYDOWN, 0x20, 0)  # post space

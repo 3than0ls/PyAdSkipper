@@ -1,5 +1,4 @@
-from gui.utils import get_process_by_name
-from utils import WIDTH
+from utils import WIDTH, get_process_by_name
 import tkinter as tk
 import subprocess
 import os
@@ -71,26 +70,37 @@ class Home(tk.Frame):
                 else:
                     # create a PyAdScript process, however the process returned is not the one we want
                     # not sure how or why that is, but the returned process is not the correct one
-                    process = subprocess.Popen(
-                        os.path.abspath(r".\PyAdScript.exe"),
-                        stdin=subprocess.PIPE,
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.PIPE,
-                        universal_newlines=True,
-                        creationflags=subprocess.DETACHED_PROCESS,
-                        close_fds=True,
-                    )
                     try:
-                        out, err = process.communicate(timeout=1)
-                        self.handle_error(err)
+                        process = subprocess.Popen(
+                            os.path.abspath(r".\PyAdScript.exe"),
+                            stdin=subprocess.PIPE,
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE,
+                            universal_newlines=True,
+                            creationflags=subprocess.DETACHED_PROCESS,
+                            close_fds=True,
+                        )
+                    except FileNotFoundError as e:
+                        # this means that the script file wasn't found, which is really bad
+                        self.handle_error(e)
                         self.running = True  # will be set to False later
-                    except subprocess.TimeoutExpired:
-                        # this means that the script initialized with no problems
-                        process.kill()
-                        # re-fetch the script process
-                        process = get_process_by_name("PyAdScript.exe")
-                        set_pid(process.pid)
-                        self.status.set("")
+                    else:
+                        try:
+                            out, err = process.communicate(timeout=1)
+                            self.handle_error(err)
+                            self.running = True  # will be set to False later
+                        except subprocess.TimeoutExpired:
+                            # this means that the script initialized with no problems
+                            process.kill()
+                            # re-fetch the script process
+                            process = get_process_by_name("PyAdScript.exe")
+                            set_pid(process.pid)
+                            self.status.set("")
+                            # reset cursor and focus
+                            root.config(cursor="")
+                            btn.config(cursor="hand2")
+                            root.focus()
+
             self.running = not self.running
 
             btn["activebackground"] = btn["bg"] = status[self.running]["color"]
@@ -136,6 +146,8 @@ class Home(tk.Frame):
             message = "Spotify executable was unable to be automatically located. Please manually provide the path to Spotify.exe in the settings tab."
         elif err_name == "errors.InvalidPath":
             message = "The path specified for the Spotify executable is invalid. Are you sure the path points to Spotify.exe?"
+        elif err_name == "FileNotFoundError":
+            message = "The GUI could not find the location of the script (PyAdScript.exe). This means it has been moved, renamed, or deleted. Try re-moving, renaming, or re-installing the script. To reinstall, go to the Guide tab and visit the GitHub for the latest release."
         else:
             message = f"An unknown and unexpected error has occurred during initialization. Make sure all your settings are correct. Go to the script's local directory and open error.txt for more information."
             with open(r".\\error.txt", "w+") as f:

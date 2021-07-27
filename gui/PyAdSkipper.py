@@ -1,4 +1,5 @@
-from gui.utils import load_settings
+import sys
+from utils import load_settings
 import tkinter as tk
 from tkinter import ttk
 from pages.settings import Settings
@@ -6,9 +7,9 @@ from pages.home import Home
 from pages.guide import Guide
 from utils import WIDTH, HEIGHT
 from shortcut import create_desktop_shortcut
-import os
+from singleton import SingleInstance, SingleInstanceException
 
-VERSION = "1.3"
+VERSION = "1.4"
 
 
 class Application(tk.Frame):
@@ -32,10 +33,8 @@ class Application(tk.Frame):
 
 
 if __name__ == "__main__":
-    create_shortcut = load_settings()["Create Shortcut"]
-    if create_shortcut:
-        create_desktop_shortcut()
 
+    # initialize tkinter GUI window
     root = tk.Tk(className=" PyAdSkipper")
     root.resizable(False, False)
     root.geometry(f"{WIDTH}x{HEIGHT}")
@@ -51,4 +50,17 @@ if __name__ == "__main__":
     root.bind_all("<Button-1>", refocus)
 
     app = Application(root)
+
+    # ensure there is only one instance running
+    try:
+        me = SingleInstance()
+    except SingleInstanceException:
+        sys.exit()
+
+    # create a shortcut if setting allows so
+    create_shortcut = load_settings()["Create Shortcut"]
+    if create_shortcut:
+        create_desktop_shortcut()
+
+    # start application
     app.mainloop()

@@ -5,6 +5,7 @@ import webbrowser
 import json
 import psutil
 import os
+import win32gui
 
 
 ### WIDTH and HEIGHT of the GUI window
@@ -12,7 +13,7 @@ WIDTH = 420
 HEIGHT = 190
 
 
-### utility functions to save and load settings
+#### utility functions to save and load settings
 def save_settings(settings):
     with open("settings.json", "w+") as f:
         json.dump(settings, f, indent=4)
@@ -25,7 +26,7 @@ def load_settings(path="settings.json"):
     except:
         default_settings = {
             "Spotify Path": "<Please specify>",
-            "Pause When Locked": "Yes",
+            "Pause When Locked": "No",
             "Push To Back": "No",
             "Create Shortcut": "Yes",
         }
@@ -33,7 +34,7 @@ def load_settings(path="settings.json"):
         return default_settings
 
 
-### utility function to get process IDs by name, same one method as used in the script function _psutil_get_spotify_pid() in utils
+#### utility function to get process IDs by name, same one method as used in the script function _psutil_get_spotify_pid() in utils
 def get_process_by_name(name):
     process = None
     for p in psutil.process_iter():
