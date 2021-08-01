@@ -25,6 +25,7 @@ def get_pid():
 
 
 class Home(tk.Frame):
+    """the home 'tab' widget of the GUI, where you start the script and where error messages may be shown"""
     def __init__(self, master, *args):
         super().__init__(master)
         self.running = True if get_pid() is not None else False

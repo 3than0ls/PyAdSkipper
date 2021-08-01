@@ -9,7 +9,7 @@ from utils import WIDTH, HEIGHT
 from shortcut import create_desktop_shortcut
 from singleton import SingleInstance, SingleInstanceException
 
-VERSION = "1.4"
+VERSION = "1.5"
 
 
 class Application(tk.Frame):
@@ -21,6 +21,7 @@ class Application(tk.Frame):
         self.menu_widget()
 
     def menu_widget(self):
+        """create the menu widget at the top, allowing multiple 'tabs'"""
         nb = ttk.Notebook(self.master)
 
         for Page in (Home, Settings, Guide):
@@ -33,7 +34,6 @@ class Application(tk.Frame):
 
 
 if __name__ == "__main__":
-
     # initialize tkinter GUI window
     root = tk.Tk(className=" PyAdSkipper")
     root.resizable(False, False)

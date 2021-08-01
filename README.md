@@ -1,7 +1,7 @@
 # PyAdSkipper
 A python script that skips Spotify ads, and can be launched through a GUI. Uses pywin32, and only works for Windows. It comes in two parts, first being `PyAdSkipper`, the GUI and interface to access the second part. The second part is `PyAdScript`, which is the script that detects when Spotify is playing the ad and restarts it.
 
-To start it, download the latest release. Extract the downloaded .zip folder (in File Explorer do this by clicking Compressed Folder Tools -> Extract All) into your desired location. This will open a new File Explorer window with the extracted files. Run **PyAdSkipper.exe (not PyAdScript.exe)**, which is the GUI to interact with the script. Running this will also create a desktop icon for you, which you can find out how to disable by reading the settings below.
+To start it, download the latest release. Extract the downloaded .zip folder (in File Explorer do this by clicking Compressed Folder Tools -> Extract All) into your desired location. This will open a new File Explorer window with the extracted files. Run **PyAdSkipper.exe (not PyAdScript.exe)**, which is the GUI to interact with the script. Running this will also create a desktop icon for you, which you can find out how to disable if wanted by reading the settings below.
 
 Usually, your computer will prevent you from downloading or running .exe files you downloaded from the internet. If you don't trust the .exe downloaded from the release, you can review the source code that is also found with the release, or go through the latest code in the GitHub repository. If you still don't trust the .exe, you can download the code and find out how to compile it yourself to guarantee safety. This is more complicated and only recommended for those that have a bit of experience with how Python and Pipenv.
 
@@ -24,6 +24,9 @@ Application settings can be changed using the GUI. Manually changing the values 
 
 `Create Shortcut` - `Yes` or `No` - If set to `Yes`, a new desktop shortcut will be created (and possibly override the previous one) in the desktop folder. If set to no, shortcut deletion be stopped, but the current desktop shortcut will not be deleted.
 
+# Uninstalling
+To uninstall, simply ensure that the script (`PyAdScript.exe`) is not running. You can shut it down using the GUI or using task manager. Then, ensure that the GUI (`PyAdSkipper.exe`) is not running. Finally, delete the local directory/folder that these two are contained in. If you try to delete the folder (or try to delete the executables themselves) while they are running, Windows will prevent them from being deleted.
+
 # Packages and Python version
 PyAdSkipper runs on Python 3.8, and uses Pipenv to manage dependencies
 PyAdSkipper relies on `pywin32` for interaction with handles to the Spotify window, and `psutil` to get information about running processes.
@@ -32,7 +35,11 @@ PyAdSkipper also uses `pyinstaller` to compile the script into an executable, an
 # Compiling the script and GUI to 2 seperate executables
 Install all dependencies and dev dependencies using Pipenv. Dependencies are specified by the Pipfile, and can be installed by going to the script's local directory and running:
 1) `pipenv install --dev`
-Then, run these two commands:
-1) `pyinstaller -F -i .\icon.ico -w .\gui\PyAdSkipper.py`
-2) `pyinstaller -F -i .\icon.ico -w .\script\PyAdScript.py`
-Then, move `icon.ico` to the created `dist` folder. After running it the first time, a `settings.json` file and `pid.txt` file will be generated.
+Activate the Pipenv by running
+1) `pipenv shell`
+Alternatively, you can use `pip`, which should also work, but I haven't memorized the commands required to install.m ,,m,nbm        
+Then, run these two commands to compile the script:
+1) `pyinstaller -F -i .\icon.ico -w .\gui\PyAdSkipper.py` (for the GUI)
+2) `pyinstaller -F -i .\icon.ico -w .\script\PyAdScript.py` (for the script itself)
+This will create a `dist` and `build` folder in the local directory, as well as some `.spec` files. The only important part is the two `.exe` files in the `dist` folder. 
+Finally, move `icon.ico` to the created `dist` folder. After running it the first time, a `settings.json` file and `pid.txt` file will be generated.

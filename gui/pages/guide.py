@@ -4,6 +4,7 @@ from utils import Header, Info, Link
 
 class Guide(tk.Frame):
     def __init__(self, master, version, *args):
+        """the guide 'tab' widget of the GUI"""
         super().__init__(master)
         self.version = version
         # configure canvas and frame for scroll bar
@@ -58,4 +59,14 @@ class Guide(tk.Frame):
         Info(
             self.frame,
             text=not_working,
+        )._pack()
+
+        Header(
+            self.frame,
+            text="The script does not seem to be skipping some ads.",
+        )._pack()
+        not_skipping = 'The script relies on the Spotify window name to recognize if an ad is playing, meaning there is no need to use the Spotify API (which woud require additional bothersome credentials.) The downside, however, is that while for most ads, the window name is "Advertisement," some ads (usually those from Spotify artist/songs) are not named this, and so the script does not detect that they are ads. Unfortunately, there is no current way to solve this.'
+        Info(
+            self.frame,
+            text=not_skipping,
         )._pack()

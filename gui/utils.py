@@ -13,28 +13,31 @@ WIDTH = 420
 HEIGHT = 190
 
 
+DEFAULT_SETTINGS = {
+    "Spotify Path": "<Please specify>",
+    "Pause When Locked": "No",
+    "Push To Back": "No",
+    "Create Shortcut": "Yes",
+}
+
 #### utility functions to save and load settings
 def save_settings(settings):
+    """saves settings to settings.json"""
     with open("settings.json", "w+") as f:
         json.dump(settings, f, indent=4)
 
 
 def load_settings(path="settings.json"):
+    "attempts to load settings from settings.json, and if they can't be found, return the default settings and save it"
     try:
         with open(path, "r") as f:
             return json.loads(f.read())
     except:
-        default_settings = {
-            "Spotify Path": "<Please specify>",
-            "Pause When Locked": "No",
-            "Push To Back": "No",
-            "Create Shortcut": "Yes",
-        }
-        save_settings(default_settings)
-        return default_settings
+        save_settings(DEFAULT_SETTINGS)
+        return DEFAULT_SETTINGS
 
 
-#### utility function to get process IDs by name, same one method as used in the script function _psutil_get_spotify_pid() in utils
+#### utility function to get process IDs by name, similar method as used in the script function _psutil_get_spotify_pid() in script utils
 def get_process_by_name(name):
     process = None
     for p in psutil.process_iter():
@@ -56,7 +59,9 @@ def get_process_by_name(name):
         return process
 
 
-#### A bunch of components used in the GUI
+#########################################
+# A bunch of components used in the GUI
+#########################################
 
 
 class Input(tk.Entry):

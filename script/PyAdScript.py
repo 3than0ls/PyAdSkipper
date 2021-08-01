@@ -10,9 +10,8 @@ import win32gui, win32api, win32con
 import subprocess
 import os
 import shutil
-import ctypes
 
-VERSION = "1.1"
+VERSION = "1.2"
 
 
 class Controller:
@@ -33,48 +32,51 @@ class Controller:
             with open(r".\\settings.json", "w") as f:
                 json.dump(self.settings, f, indent=4)
 
+        # if given Spotify path in settings is invalid, raise error
         if not os.path.basename(self.settings["Spotify Path"]) or not shutil.which(
             self.settings["Spotify Path"]
         ):
             raise InvalidPath()
 
-        self.spath = (
+        self.spotify_path = (
             os.path.normpath(self.settings["Spotify Path"])
             .encode("unicode_escape")
             .decode("utf-8")
         )
 
         # set spotify process ID during initalization
-        pid = get_spotify_pid(self.spath)
+        pid = get_spotify_pid(self.spotify_path)
         if pid is not None:
             self.spotify_pid = pid
         else:
             self.spotify_pid = None
 
     def is_locked(self):
-        # https://stackoverflow.com/a/57258754/9474247, but I think this causes Windows to not sleep
-        # outputall = str(
-        #     subprocess.check_output(
-        #         "TASKLIST", creationflags=subprocess.CREATE_NO_WINDOW
-        #     )
-        # )
-        # return "LogonUI.exe" in outputall
-
+        """returns whether or not the Windows PC is in locked state (or in the login page)"""
         # https://stackoverflow.com/a/57258754/9474247
-        user32 = ctypes.windll.User32
-        return user32.GetForegroundWindow() % 10 == 0
+        outputall = str(
+            subprocess.check_output(
+                "TASKLIST", creationflags=subprocess.CREATE_NO_WINDOW
+            )
+        )
+        return "LogonUI.exe" in outputall
+
+        # https://stackoverflow.com/a/57258754/9474247, alternative method
+        # user32 = ctypes.windll.User32
+        # return user32.GetForegroundWindow() % 10 == 0
 
     def restart_spotify(self, spotify_pid=None):
+        """restarts spotify using a series of timed actions"""
         if spotify_pid is None:
-            spotify_pid = get_spotify_pid(self.spath)
+            spotify_pid = get_spotify_pid(self.spotify_path)
 
         # attempt to close it by clicking out, but if that doesn't work, just terminate the process
         # get the exit handle for spotify, and click it, which exists spotify "gracefully"
         window_handle = get_spotify_window_handle(spotify_pid=spotify_pid)
         win32gui.PostMessage(window_handle, win32con.WM_CLOSE, None, None)
 
-        # wait one second after termination to reopen
-        time.sleep(1)
+        # wait about one second after termination to reopen
+        time.sleep(1.3)
         # reopen spotify
         spotify_process = subprocess.Popen(self.settings["Spotify Path"])
         self.spotify_pid = spotify_process.pid
@@ -91,8 +93,13 @@ class Controller:
             win32gui.SetWindowPos(window_handle, win32con.HWND_BOTTOM, x, y, w, h, 0)
 
     def currently_playing(self, spotify_pid=None):
+        """
+        determines what type of content Spotify is currently playing
+        some ads have the same Window name as the application being paused,
+        which causes them not to be skipped, but this is a semi-rare occasion
+        """
         if spotify_pid is None:
-            spotify_pid = get_spotify_pid(self.spath)
+            spotify_pid = get_spotify_pid(self.spotify_path)
 
         if self.spotify_pid is None:
             # Spotify was not running since last iteration, but check again to see if it is
@@ -121,30 +128,31 @@ class Controller:
             return "<ADVERTISEMENT>"
 
     def start(self):
+        """starts the loop which runs the script. the looped code runs every INTERVALS seconds"""
         last_song = ""
 
         while True:
             if self.settings["Pause When Locked"] == "Yes" and self.is_locked():
                 # skip, no need to check
                 continue
-
-            spotify_pid = get_spotify_pid(self.spath)
-            currently_playing = self.currently_playing(spotify_pid=spotify_pid)
-            # print(currently_playing)
-            # nothing is being played, so just do nothing
-            if currently_playing == "<ADVERTISEMENT>":
-                try:
-                    self.restart_spotify(spotify_pid=spotify_pid)
-                except SpotifyNotRunning:
-                    # Spotify was somehow closed by other means before the script could get to it
-                    continue
             else:
-                if currently_playing != last_song:
-                    # print(last_song)
-                    last_song = currently_playing
+                spotify_pid = get_spotify_pid(self.spotify_path)
+                currently_playing = self.currently_playing(spotify_pid=spotify_pid)
+                # print(currently_playing)
+                # nothing is being played, so just do nothing
+                if currently_playing == "<ADVERTISEMENT>":
+                    try:
+                        self.restart_spotify(spotify_pid=spotify_pid)
+                    except SpotifyNotRunning:
+                        # Spotify was somehow closed by other means before the script could get to it
+                        continue
+                else:
+                    if currently_playing != last_song:
+                        # print(last_song)
+                        last_song = currently_playing
 
-            # do this every interval seconds
-            time.sleep(Controller.INTERVALS)
+                # do this every interval seconds
+                time.sleep(Controller.INTERVALS)
 
 
 if __name__ == "__main__":

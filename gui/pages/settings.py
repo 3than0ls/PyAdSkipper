@@ -12,6 +12,7 @@ from utils import (
 
 class Settings(tk.Frame):
     def __init__(self, master, *args):
+        """the settings 'tab' widget of the GUI"""
         super().__init__(master)
         self.speed_options = ["Fast", "Medium", "Slow"]
         self.yes_no_options = ["Yes", "No"]
