@@ -17,7 +17,7 @@ class Settings(tk.Frame):
         self.speed_options = ["Fast", "Medium", "Slow"]
         self.yes_no_options = ["Yes", "No"]
         self.tooltips = {
-            "Spotify Path": "The path to Spotify on your local computer.",
+            "Spotify Path": "The path to Spotify on your local computer. This is where exactly on your PC Spotify.exe is located.",
             "Pause When Locked": "Whether or not to stop the script from restarting Spotify while the Windows account is locked. This helps prevent Spotify restarting when using Spotify on phone and it reaches an ad.",
             "Push To Back": "Whether or not to push Spotify below the active window after restart.",
             "Create Shortcut": "Whether or not to create a desktop shortcut when the GUI launches. Setting this to yes will create a shortcut or overwrite the previous shortcut on GUI launch, so even when you delete it a new one will be generated. Set this to no, and it will no longer generate new ones.",
