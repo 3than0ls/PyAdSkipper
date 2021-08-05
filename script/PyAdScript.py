@@ -11,7 +11,7 @@ import subprocess
 import os
 import shutil
 
-VERSION = "1.2"
+VERSION = "1.3"
 
 
 class Controller:
@@ -19,6 +19,17 @@ class Controller:
     INTERVALS = 0.25
 
     def __init__(self):
+        self.load_settings()
+
+        # set spotify process ID during initalization
+        pid = get_spotify_pid(self.spotify_path)
+        if pid is not None:
+            self.spotify_pid = pid
+        else:
+            self.spotify_pid = None
+
+    def load_settings(self):
+        """load settings from settings.json and if needed, validate it or return error it"""
         # set settings variables
         with open(r".\\settings.json", "r") as f:
             self.settings = json.load(f)
@@ -43,13 +54,6 @@ class Controller:
             .encode("unicode_escape")
             .decode("utf-8")
         )
-
-        # set spotify process ID during initalization
-        pid = get_spotify_pid(self.spotify_path)
-        if pid is not None:
-            self.spotify_pid = pid
-        else:
-            self.spotify_pid = None
 
     def is_locked(self):
         """returns whether or not the Windows PC is in locked state (or in the login page)"""

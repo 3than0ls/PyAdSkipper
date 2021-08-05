@@ -34,7 +34,7 @@ class Guide(tk.Frame):
             text=f"Version {self.version}",
         )._pack()
         Header(self.frame, text="General Information")._pack()
-        general_info = f"PyAdSkipper is a tool used to skip Spotify ads. It functions by detecting when an ad is being played, restarting Spotify, and resuming music."
+        general_info = f"PyAdSkipper is a tool used to skip Spotify ads. It functions by detecting when an ad is being played, restarting Spotify, and resuming music. View the README included in the local directory for the most information."
         Info(
             self.frame,
             text=general_info,
@@ -46,7 +46,7 @@ class Guide(tk.Frame):
         )._pack()
         Link(
             self.frame,
-            "Visit this project's GitHub repo for more information",
+            "Visit this project's GitHub repo for more information.",
             "https://github.com/3than0ls/PyAdSkipper",
         )._pack()
 
@@ -69,4 +69,14 @@ class Guide(tk.Frame):
         Info(
             self.frame,
             text=not_skipping,
+        )._pack()
+
+        Header(
+            self.frame,
+            text="The script is skipping my local file songs.",
+        )._pack()
+        skipping_local = 'Again, the script relies on the Spotify window name to recognize if an ad is playing. The window name of Spotify when playing a local file is the name of that local file. If you name your local file "Advertisement", it will automatically be considered an advertisement.'
+        Info(
+            self.frame,
+            text=skipping_local,
         )._pack()

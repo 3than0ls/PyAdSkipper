@@ -3,10 +3,15 @@ A python script that skips Spotify ads, and can be launched through a GUI. Uses 
 
 The GUI (`PyAdSkipper.exe`) launches the script, which is a seperate executable, meaning that once you've launched the script and no errors have occured, you can happily close the GUI and the script part will still run in the background. You can either stop the script using the same GUI, or using task manager and searching for `PyAdScript.exe`.
 
-To start it, download the latest release. Extract the downloaded .zip folder (in File Explorer do this by clicking Compressed Folder Tools -> Extract All) into your desired location. This will open a new File Explorer window with the extracted files. Run **PyAdSkipper.exe (not PyAdScript.exe)**, which is the GUI to interact with the script. Running this will also create a desktop icon for you, which you can find out how to disable if wanted by reading the settings below.
+
+# Installation
+To install:
+1) Download the latest release, which should be on the right. 
+2) Extract the downloaded .zip folder (in File Explorer do this by clicking Compressed Folder Tools -> Extract All) into your desired location. This will open a new File Explorer window with the extracted files. 
+3) Run **PyAdSkipper.exe (not PyAdScript.exe)**, which is the GUI to interact with the script. Running this will also create a desktop icon for you, which you can find out how to disable if wanted by reading the settings below.
 
 
-Usually, your computer will prevent you from downloading or running .exe files you downloaded from the internet. If you don't trust the .exe downloaded from the release, you can review the source code that is also found with the release, or go through the latest code in the GitHub repository. If you still don't trust the .exe, you can download the code and find out how to compile it yourself to guarantee safety. This is more complicated and only recommended for those that have a bit of experience with how Python and Pipenv.
+Usually, your computer will prevent you from downloading or running `.exe` files you downloaded from the internet. If you don't trust the .exe downloaded from the release, you can review the source code that is also found with the release, or go through the latest code in the GitHub repository. If you still don't trust the .exe, you can download the code and find out how to compile it yourself to guarantee safety. This is more complicated and only recommended for those that have a bit of experience with how Python and Pipenv.
 
 
 # How does it work?

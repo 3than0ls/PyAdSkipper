@@ -9,7 +9,7 @@ from utils import WIDTH, HEIGHT
 from shortcut import create_desktop_shortcut
 from singleton import SingleInstance, SingleInstanceException
 
-VERSION = "1.5"
+VERSION = "1.6"
 
 
 class Application(tk.Frame):
